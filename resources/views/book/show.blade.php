@@ -12,7 +12,9 @@
         </div>
         <div class="col-md-9">
             <h1 class="mb-3">{{ $book->title }}</h1>
-            <p><strong>Author:</strong> {{ $book->author }}</p>
+            <p><strong>Author:</strong> <a href="{{ route('authors.show', $book->author) }}" target="_blank">
+                    {{ $book->author->name }}</a>
+            </p>
             <p><strong>Year:</strong> {{ $book->year }}</p>
             <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
             <p><strong>Pages:</strong> {{ $book->pages_count }}</p>

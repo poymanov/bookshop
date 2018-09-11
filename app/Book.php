@@ -17,4 +17,9 @@ class Book extends Model
     {
         return $value ?: self::DEFAULT_IMAGE_URL;
     }
+
+    public function author()
+    {
+        return $this->belongsTo(Author::class, 'author_id');
+    }
 }

@@ -32,7 +32,7 @@ class BookTest extends TestCase
 
         $response->assertSee($book->title);
         $response->assertSee($book->description);
-        $response->assertSee($book->author);
+        $response->assertSee($book->author_id);
         $response->assertSee($book->isbn);
         $response->assertSee($book->year);
         $response->assertSee($book->pages_count);
