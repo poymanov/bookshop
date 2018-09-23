@@ -24,4 +24,13 @@ Route::group(['prefix' => 'authors', 'as' => 'authors.'], function() {
     Route::get('{author}', 'AuthorsController@show')->name('show');
 });
 
+Route::group(['prefix' => '/admin/authors', 'namespace' => 'Admin', 'as' => 'admin.authors.'], function() {
+    Route::get('', 'AuthorsController@index')->name('index');
+    Route::post('', 'AuthorsController@store')->name('store');
+    Route::get('create', 'AuthorsController@create')->name('create');
+    Route::get('{author}/edit', 'AuthorsController@edit')->name('edit');
+    Route::patch('{author}', 'AuthorsController@update')->name('update');
+    Route::delete('{author}', 'AuthorsController@destroy')->name('destroy');
+    Route::get('{author}', 'AuthorsController@show')->name('show');
+});
 
