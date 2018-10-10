@@ -21,4 +21,8 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash \
 RUN usermod -u 1000 www-data \
     && chown www-data:www-data -R /var/www
 
+# Aliases
+COPY docker/php/aliases /usr/sbin/bashrc_aliases
+RUN cat /usr/sbin/bashrc_aliases >> ~/.bashrc
+
 WORKDIR /var/www
