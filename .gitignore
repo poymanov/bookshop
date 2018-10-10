@@ -1,8 +1,8 @@
-/node_modules
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+/src/node_modules
+/src/public/hot
+/src/public/storage
+/src/storage/*.key
+/src/vendor
 /.idea
 /.vscode
 /.vagrant
@@ -12,4 +12,6 @@ npm-debug.log
 yarn-error.log
 .env
 .phpunit.result.cache
-/public/assets
+/src/public/assets
+.docker.env
+/src/bootstrap/storage
