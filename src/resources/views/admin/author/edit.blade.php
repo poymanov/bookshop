@@ -1,38 +1,52 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title')
     New author
 @endsection
 
 @section('content')
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Edit author</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            @if(count($errors))
-                <ul class="alert alert-danger">
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            @endif
-            <form method="POST" action="{{ route('admin.authors.update', $author) }}">
-                {{ csrf_field() }}
-                {{ method_field('PATCH')  }}
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input name="name" type="text" class="form-control" id="title" value="{{ old('name', $author->name) }}">
+<div class="row tm-mt-big">
+    <div class="col-xl-6 col-lg-10 col-md-12 col-sm-12">
+        <div class="bg-white tm-block">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="tm-block-title d-inline-block">Edit author</h2>
                 </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea name="description" class="form-control" id="description" rows="3">{{ old('description', $author->description) }}</textarea>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    @if(count($errors))
+                        <ul class="alert alert-danger">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
-            </form>
+            </div>
+            <div class="row mt-4 tm-edit-product-row">
+                <div class="col-xl-12 col-lg-7 col-md-12">
+                    <form action="{{ route('admin.authors.update', $author) }}" class="tm-edit-product-form" method="post">
+                        {{ csrf_field() }}
+                        {{ method_field('PATCH')  }}
+                        <div class="input-group mb-3">
+                            <label for="name" class="col-xl-2 col-lg-4 col-md-4 col-sm-5 col-form-label">
+                                Name
+                            </label>
+                            <input id="name" name="name" type="text" class="form-control validate col-xl-10 col-lg-8 col-md-8 col-sm-7" required value="{{ old('name', $author->name) }}">
+                        </div>
+                        <div class="input-group mb-3">
+                            <label for="description" class="col-xl-2 col-lg-4 col-md-4 col-sm-5 mb-2">Description</label>
+                            <textarea name="description" class="form-control validate col-xl-10 col-lg-8 col-md-8 col-sm-7" required rows="3">{{ old('description', $author->description) }}</textarea>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="ml-auto col-xl-10 col-lg-8 col-md-8 col-sm-7 pl-0">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

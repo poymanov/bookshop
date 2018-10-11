@@ -248,11 +248,6 @@ class AuthorTest extends TestCase
         }
     }
 
-    private function createAdmin()
-    {
-        return factory('App\User')->state('admin')->create();
-    }
-
     private function getUserRestrictedRoutes()
     {
         $author = create('App\Author');

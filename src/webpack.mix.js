@@ -16,4 +16,5 @@ mix
     .setResourceRoot('/assets/')
     .js('resources/js/app.js', 'js')
     .sass('resources/sass/app.scss', 'css')
+    .sass('resources/sass/admin.scss', 'css')
     .version();

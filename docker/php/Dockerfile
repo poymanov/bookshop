@@ -19,6 +19,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash \
 
 # Permissions
 RUN usermod -u 1000 www-data \
+    && groupmod -g 1000 www-data \
     && chown www-data:www-data -R /var/www
 
 # Aliases
