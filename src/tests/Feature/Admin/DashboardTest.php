@@ -31,7 +31,7 @@ class DashboardTest extends TestCase
     /**
      * @test
      */
-    public function dashboard_have_data()
+    public function dashboard_have_authors()
     {
         $dashboardUrl = route('admin.index');
 
@@ -46,5 +46,25 @@ class DashboardTest extends TestCase
         $authorsNames = $authors->pluck('name');
 
         $response->assertSeeInOrder($authorsNames->all());
+    }
+
+    /**
+     * @test
+     */
+    public function dashboard_have_books()
+    {
+        $dashboardUrl = route('admin.index');
+
+        $admin = $this->createAdmin();
+        $this->signIn($admin);
+
+        $books = create('App\Book', [] ,7);
+
+        $response = $this->get($dashboardUrl);
+        $response->assertSee('Last books');
+
+        $booksNames = $books->pluck('name');
+
+        $response->assertSeeInOrder($booksNames->all());
     }
 }

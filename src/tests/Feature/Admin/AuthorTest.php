@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Author;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -36,7 +35,6 @@ class AuthorTest extends TestCase
 
             auth()->logout();
         }
-
     }
 
     /**

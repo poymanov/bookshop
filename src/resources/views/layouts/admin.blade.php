@@ -40,6 +40,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->is('admin/authors*') ? 'active' : '' }}" href="{{ route('admin.authors.index') }}">Authors</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ request()->is('admin/books*') ? 'active' : '' }}" href="{{ route('admin.books.index') }}">Books</a>
+                                </li>
                             </ul>
                             <ul class="navbar-nav">
                                 <li class="nav-item">

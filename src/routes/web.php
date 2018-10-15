@@ -36,4 +36,14 @@ Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'as' => 'admin.'], f
         Route::delete('{author}', 'AuthorsController@destroy')->name('destroy');
         Route::get('{author}', 'AuthorsController@show')->name('show');
     });
+
+    Route::group(['prefix' => 'books', 'as' => 'books.'], function() {
+        Route::get('', 'BooksController@index')->name('index');
+        Route::post('', 'BooksController@store')->name('store');
+        Route::get('create', 'BooksController@create')->name('create');
+        Route::get('{book}/edit', 'BooksController@edit')->name('edit');
+        Route::patch('{book}', 'BooksController@update')->name('update');
+        Route::delete('{book}', 'BooksController@destroy')->name('destroy');
+        Route::get('{book}', 'BooksController@show')->name('show');
+    });
 });

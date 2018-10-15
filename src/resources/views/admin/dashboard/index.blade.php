@@ -11,7 +11,6 @@
                 <div class="row">
                     <div class="col-8">
                         <h2 class="tm-block-title d-inline-block">Last authors</h2>
-
                     </div>
                     <div class="col-4 text-right">
                         <a href="{{ route('admin.authors.index') }}" class="tm-link-black">View All</a>
@@ -26,5 +25,25 @@
                 </ol>
             </div>
         </div>
+        <div class="tm-col tm-col-big">
+            <div class="bg-white tm-block h-100">
+                <div class="row">
+                    <div class="col-8">
+                        <h2 class="tm-block-title d-inline-block">Last books</h2>
+                    </div>
+                    <div class="col-4 text-right">
+                        <a href="{{ route('admin.books.index') }}" class="tm-link-black">View All</a>
+                    </div>
+                </div>
+                <ol class="tm-list-group tm-list-group-alternate-color tm-list-group-pad-big">
+                    @foreach($books as $book)
+                        <li class="tm-list-group-item">
+                            <a href="{{ route('admin.books.show', $book) }}">{{ $book->title }}</a>
+                        </li>
+                    @endforeach
+                </ol>
+            </div>
+        </div>
+        <div class="tm-col tm-col-small"></div>
     </div>
 @endsection
