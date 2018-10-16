@@ -14,3 +14,4 @@ before_script:
 cache:
   directories:
   - vendor
+  - node_modules
