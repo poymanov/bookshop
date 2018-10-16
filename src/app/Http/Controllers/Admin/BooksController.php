@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Author;
 use App\Book;
+use App\Author;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -23,6 +23,7 @@ class BooksController extends Controller
     public function index()
     {
         $books = Book::paginate(12);
+
         return view('admin.book.index', compact('books'));
     }
 
@@ -41,6 +42,7 @@ class BooksController extends Controller
     public function create()
     {
         $authors = Author::all();
+
         return view('admin.book.create', compact('authors'));
     }
 
@@ -77,6 +79,7 @@ class BooksController extends Controller
     public function edit(Book $book)
     {
         $authors = Author::all();
+
         return view('admin.book.edit', compact('book', 'authors'));
     }
 
@@ -118,5 +121,4 @@ class BooksController extends Controller
 
         return redirect(route('admin.books.index'));
     }
-
 }

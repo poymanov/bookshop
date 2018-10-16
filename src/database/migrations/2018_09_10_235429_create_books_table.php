@@ -27,8 +27,6 @@ class CreateBooksTable extends Migration
 
             $table->index(['title']);
         });
-
-
     }
 
     /**
