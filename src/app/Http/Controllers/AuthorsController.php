@@ -15,6 +15,7 @@ class AuthorsController extends Controller
     public function index()
     {
         $authors = Author::paginate(9);
+
         return view('author.index', compact('authors'));
     }
 
@@ -48,6 +49,7 @@ class AuthorsController extends Controller
     public function show(Author $author)
     {
         $books = $author->books()->paginate(8);
+
         return view('author.show', compact('author', 'books'));
     }
 

@@ -15,19 +15,19 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'books', 'as' => 'books.'], function() {
+Route::group(['prefix' => 'books', 'as' => 'books.'], function () {
     Route::get('{book}', 'BooksController@show')->name('show');
 });
 
-Route::group(['prefix' => 'authors', 'as' => 'authors.'], function() {
+Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
     Route::get('', 'AuthorsController@index')->name('index');
     Route::get('{author}', 'AuthorsController@show')->name('show');
 });
 
-Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'as' => 'admin.'], function() {
+Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
     Route::get('', 'DashboardController@index')->name('index');
 
-    Route::group(['prefix' => 'authors', 'as' => 'authors.'], function() {
+    Route::group(['prefix' => 'authors', 'as' => 'authors.'], function () {
         Route::get('', 'AuthorsController@index')->name('index');
         Route::post('', 'AuthorsController@store')->name('store');
         Route::get('create', 'AuthorsController@create')->name('create');
@@ -37,7 +37,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'Admin', 'as' => 'admin.'], f
         Route::get('{author}', 'AuthorsController@show')->name('show');
     });
 
-    Route::group(['prefix' => 'books', 'as' => 'books.'], function() {
+    Route::group(['prefix' => 'books', 'as' => 'books.'], function () {
         Route::get('', 'BooksController@index')->name('index');
         Route::post('', 'BooksController@store')->name('store');
         Route::get('create', 'BooksController@create')->name('create');

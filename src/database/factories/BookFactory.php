@@ -6,7 +6,7 @@ $factory->define(App\Book::class, function (Faker $faker) {
     return [
         'title' => $faker->word,
         'description' => $faker->paragraph(),
-        'author_id' => function() {
+        'author_id' => function () {
             return factory('App\Author')->create()->id;
         },
         'isbn' => $faker->isbn13,

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Author;
 use App\Book;
-use Illuminate\Http\Request;
+use App\Author;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
@@ -18,6 +17,7 @@ class DashboardController extends Controller
     {
         $authors = Author::take(7)->orderBy('created_at', 'desc')->get();
         $books = Book::take(7)->orderBy('created_at', 'desc')->get();
+
         return view('admin.dashboard.index', compact('authors', 'books'));
     }
 }
