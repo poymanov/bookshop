@@ -43,6 +43,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link {{ request()->is('admin/books*') ? 'active' : '' }}" href="{{ route('admin.books.index') }}">Books</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('home') }}" target="_blank">Front</a>
+                                </li>
                             </ul>
                             <ul class="navbar-nav">
                                 <li class="nav-item">

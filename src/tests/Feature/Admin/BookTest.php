@@ -2,6 +2,9 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Book;
+use Illuminate\Http\UploadedFile;
+use Storage;
 use Tests\TestCase;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -164,6 +167,34 @@ class BookTest extends TestCase
     /**
      * @test
      */
+    public function create_successful_with_image()
+    {
+        Storage::fake('public');
+
+        $storeUrl = route('admin.books.store');
+
+        $admin = $this->createAdmin();
+        $this->signIn($admin);
+
+        $file = UploadedFile::fake()->image('book.jpg');
+
+        $book = make('App\Book');
+
+        $response = $this->post($storeUrl, array_merge($book->toArray(), ['cover' => $file]));
+
+        $response->assertSessionHasNoErrors();
+
+        $book = Book::first();
+
+        $this->assertEquals($book->image, asset('storage/covers/' . $file->hashName()));
+
+        Storage::disk('public')->assertExists('covers/' . $file->hashName());
+
+    }
+
+    /**
+     * @test
+     */
     public function edit_page()
     {
         $admin = $this->createAdmin();
@@ -246,6 +277,61 @@ class BookTest extends TestCase
 
         $redirectUrl = route('admin.books.show', $book);
         $response->assertRedirect($redirectUrl);
+    }
+
+    /**
+     * @test
+     */
+    public function edit_validation_successful_with_image()
+    {
+        Storage::fake('public');
+
+        $admin = $this->createAdmin();
+        $this->signIn($admin);
+
+        $book = create('App\Book');
+
+        $updateUrl = route('admin.books.update', $book);
+
+        $newBookData = make('App\Book');
+
+        $file = UploadedFile::fake()->image('book.jpg');
+
+        $response = $this->patch($updateUrl, array_merge($newBookData->toArray(), ['cover' => $file]));
+
+        $response->assertSessionHasNoErrors();
+
+        $this->assertEquals($book->fresh()->image, asset('storage/covers/' . $file->hashName()));
+
+        Storage::disk('public')->assertExists('covers/' . $file->hashName());
+    }
+
+    /** @test */
+    public function create_book_with_valid_image()
+    {
+        $admin = $this->createAdmin();
+        $this->signIn($admin);
+
+        $storeUrl = route('admin.books.store');
+
+        $response = $this->post($storeUrl, ['cover' => 'not-an-image']);
+
+        $response->assertSessionHasErrors('cover');
+    }
+
+    /** @test */
+    public function update_book_with_valid_image()
+    {
+        $admin = $this->createAdmin();
+        $this->signIn($admin);
+
+        $book = create('App\Book');
+
+        $updateUrl = route('admin.books.update', $book);
+
+        $response = $this->patch($updateUrl, ['cover' => 'not-an-image']);
+
+        $response->assertSessionHasErrors('cover');
     }
 
     /**

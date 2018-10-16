@@ -9,7 +9,7 @@ class Book extends Model
     const DEFAULT_IMAGE_URL = '/images/no_image.jpg';
 
     protected $fillable = [
-        'title', 'description', 'author_id', 'isbn', 'year', 'pages_count', 'price'
+        'title', 'description', 'author_id', 'isbn', 'year', 'pages_count', 'price', 'image'
     ];
 
     public static function getLast($count=10)
@@ -19,7 +19,9 @@ class Book extends Model
 
     public function getImageAttribute($value)
     {
-        return $value ?: self::DEFAULT_IMAGE_URL;
+        //return asset($avatar ? '/storage/'.$avatar : 'images/default.png');
+        return asset($value  ? '/storage/'. $value  : self::DEFAULT_IMAGE_URL);
+        //return $value ?? self::DEFAULT_IMAGE_URL;
     }
 
     public function author()

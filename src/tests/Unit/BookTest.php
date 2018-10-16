@@ -20,11 +20,11 @@ class BookTest extends TestCase
 
         $book = factory('App\Book')->create(['image' => $customImagePath]);
 
-        $this->assertEquals($book->image, $customImagePath);
+        $this->assertEquals($book->image, asset('/storage/' . $customImagePath));
 
         $book = factory('App\Book')->create();
 
-        $this->assertEquals($book->image, $book::DEFAULT_IMAGE_URL);
+        $this->assertEquals($book->image, asset($book::DEFAULT_IMAGE_URL));
     }
 
     /**
