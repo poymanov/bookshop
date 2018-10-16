@@ -208,7 +208,6 @@ class BookTest extends TestCase
         $response->assertSuccessful();
 
         $response->assertSee('Edit book');
-        $response->assertSee('New book');
         $response->assertSee('Title');
         $response->assertSee('Description');
         $response->assertSee('Year');
