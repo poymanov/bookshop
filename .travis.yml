@@ -12,4 +12,4 @@ before_script:
 
 cache:
   directories:
-  - vendor
+  - src/vendor
