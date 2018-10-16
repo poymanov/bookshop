@@ -7,7 +7,7 @@ services:
     ports:
     - "80:80"
     volumes:
-    - ./src:/var/www
+    - .:/var/www
     depends_on:
     - php
   php:
@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./docker/php/Dockerfile
     volumes:
-    - ./src:/var/www
+    - .:/var/www
     depends_on:
     - db
   db:
