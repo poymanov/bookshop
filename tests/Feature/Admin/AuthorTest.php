@@ -104,6 +104,8 @@ class AuthorTest extends TestCase
      */
     public function create_page()
     {
+        $this->withoutExceptionHandling();
+
         $createUrl = route('admin.authors.create');
 
         $admin = $this->createAdmin();
