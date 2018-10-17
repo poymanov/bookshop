@@ -1,6 +1,6 @@
 .PHONY : start build-start stop flush copy_env remove_dependencies \
 				 install-vendor install-node-modules create-key create_assets \
-				 migrate seed test init init-demo
+				 migrate seed test app init init-demo
 
 .DEFAULT_GOAL := start
 
@@ -44,6 +44,9 @@ seed:
 
 test:
 	docker-compose exec php vendor/bin/phpunit
+
+app:
+	docker-compose exec php bash
 
 init: flush copy_env build-start remove_dependencies install-vendor install-node-modules create-key create_assets migrate
 
