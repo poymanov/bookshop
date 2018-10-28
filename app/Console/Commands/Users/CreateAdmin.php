@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Users;
 
-use App\User;
 use Hash;
+use App\User;
 use Illuminate\Console\Command;
 
 class CreateAdmin extends Command
@@ -59,6 +59,7 @@ class CreateAdmin extends Command
             $user->save();
         } catch (\Illuminate\Database\QueryException $exception) {
             $this->error($exception->getMessage());
+
             return 1;
         }
 
