@@ -19,9 +19,7 @@ class Book extends Model
 
     public function getImageAttribute($value)
     {
-        //return asset($avatar ? '/storage/'.$avatar : 'images/default.png');
         return asset($value ? '/storage/'.$value : self::DEFAULT_IMAGE_URL);
-        //return $value ?? self::DEFAULT_IMAGE_URL;
     }
 
     public function author()
