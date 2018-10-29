@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Image;
 use App\Book;
 use App\Author;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Image;
 
 class BooksController extends Controller
 {
@@ -67,7 +67,7 @@ class BooksController extends Controller
             $coverPath = request()->file('cover')->store('covers', 'public');
             $data['image'] = $coverPath;
 
-            if (!app()->environment('testing')) {
+            if (! app()->environment('testing')) {
                 $this->resizeImage($coverPath);
             }
         }
@@ -109,7 +109,7 @@ class BooksController extends Controller
             $coverPath = request()->file('cover')->store('covers', 'public');
             $data['image'] = $coverPath;
 
-            if (!app()->environment('testing')) {
+            if (! app()->environment('testing')) {
                 $this->resizeImage($coverPath);
             }
         }
@@ -133,7 +133,6 @@ class BooksController extends Controller
 
     private function resizeImage($path)
     {
-        Image::make(storage_path('app/public/' . $path))->resize(256, 385)->save();
+        Image::make(storage_path('app/public/'.$path))->resize(256, 385)->save();
     }
-
 }
