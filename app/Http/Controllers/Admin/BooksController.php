@@ -6,6 +6,7 @@ use App\Book;
 use App\Author;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Image;
 
 class BooksController extends Controller
 {
@@ -65,6 +66,10 @@ class BooksController extends Controller
         if (request()->exists('cover')) {
             $coverPath = request()->file('cover')->store('covers', 'public');
             $data['image'] = $coverPath;
+
+            if (!app()->environment('testing')) {
+                $this->resizeImage($coverPath);
+            }
         }
 
         $book = Book::create($data);
@@ -103,6 +108,10 @@ class BooksController extends Controller
         if (request()->exists('cover')) {
             $coverPath = request()->file('cover')->store('covers', 'public');
             $data['image'] = $coverPath;
+
+            if (!app()->environment('testing')) {
+                $this->resizeImage($coverPath);
+            }
         }
 
         $book->update($data);
@@ -121,4 +130,10 @@ class BooksController extends Controller
 
         return redirect(route('admin.books.index'));
     }
+
+    private function resizeImage($path)
+    {
+        Image::make(storage_path('app/public/' . $path))->resize(256, 385)->save();
+    }
+
 }
