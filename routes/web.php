@@ -14,6 +14,7 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/search', 'HomeController@search')->name('search');
 
 Route::group(['prefix' => 'books', 'as' => 'books.'], function () {
     Route::get('{book}', 'BooksController@show')->name('show');

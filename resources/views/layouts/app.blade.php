@@ -40,6 +40,10 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <form class="form-inline my-2 my-lg-0" action="{{ route('search') }}">
+                            <input name="query" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="{{ request('query') }}">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                        </form>
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">

@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Book extends Model
 {
+    use Searchable;
+
     const DEFAULT_IMAGE_URL = '/images/no_image.jpg';
 
     protected $fillable = [
@@ -25,5 +28,18 @@ class Book extends Model
     public function author()
     {
         return $this->belongsTo(Author::class, 'author_id');
+    }
+
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        $unsearchableFields = ['id', 'image', 'pages_count', 'created_at', 'updated_at', 'author_id'];
+
+        foreach ($unsearchableFields as $field) {
+            unset($array[$field]);
+        }
+
+        return $array;
     }
 }
