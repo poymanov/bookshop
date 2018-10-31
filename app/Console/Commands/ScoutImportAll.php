@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Author;
 use App\Book;
+use App\Author;
 use Illuminate\Console\Command;
 
 class ScoutImportAll extends Command
@@ -42,7 +42,7 @@ class ScoutImportAll extends Command
         $classes = $this->getClassesList();
 
         foreach ($classes as $class) {
-            $this->call("scout:import", ['model' => $class]);
+            $this->call('scout:import', ['model' => $class]);
         }
     }
 
