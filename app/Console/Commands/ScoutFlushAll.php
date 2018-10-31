@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Author;
 use App\Book;
+use App\Author;
 use Illuminate\Console\Command;
 
 class ScoutFlushAll extends Command
@@ -42,7 +42,7 @@ class ScoutFlushAll extends Command
         $classes = $this->getClassesList();
 
         foreach ($classes as $class) {
-            $this->call("scout:flush", ['model' => $class]);
+            $this->call('scout:flush', ['model' => $class]);
         }
     }
 
