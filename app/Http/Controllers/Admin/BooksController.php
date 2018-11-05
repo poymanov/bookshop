@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Image;
+use App\Services\BooksService;
 use App\Book;
 use App\Author;
 use Illuminate\Http\Request;
@@ -10,11 +10,14 @@ use App\Http\Controllers\Controller;
 
 class BooksController extends Controller
 {
+    private $service;
+
     /**
      * BooksController constructor.
      */
     public function __construct()
     {
+        $this->service = new BooksService();
         $this->middleware('admin');
     }
 
@@ -50,28 +53,10 @@ class BooksController extends Controller
     /**
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function store()
+    public function store(Request $request)
     {
-        $data = request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'author_id' => 'required|exists:authors,id',
-            'isbn' => 'required',
-            'year' => 'required',
-            'pages_count' => 'required',
-            'price' => 'required',
-            'cover' => 'nullable|image'
-        ]);
-
-        if (request()->exists('cover')) {
-            $coverPath = request()->file('cover')->store('covers', 'public');
-            $data['image'] = $coverPath;
-
-            if (! app()->environment('testing')) {
-                $this->resizeImage($coverPath);
-            }
-        }
-
+        $data = $request->validate($this->service::VALIDATION_RULES);
+        $data = $this->service->processImageUpload($request, $data);
         $book = Book::create($data);
 
         return redirect(route('admin.books.show', $book));
@@ -92,27 +77,10 @@ class BooksController extends Controller
      * @param Book $book
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update(Book $book)
+    public function update(Request $request, Book $book)
     {
-        $data = request()->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'author_id' => 'required|exists:authors,id',
-            'isbn' => 'required',
-            'year' => 'required',
-            'pages_count' => 'required',
-            'price' => 'required',
-            'cover' => 'nullable|image'
-        ]);
-
-        if (request()->exists('cover')) {
-            $coverPath = request()->file('cover')->store('covers', 'public');
-            $data['image'] = $coverPath;
-
-            if (! app()->environment('testing')) {
-                $this->resizeImage($coverPath);
-            }
-        }
+        $data = request()->validate($this->service::VALIDATION_RULES);
+        $data = $this->service->processImageUpload($request, $data);
 
         $book->update($data);
 
@@ -129,10 +97,5 @@ class BooksController extends Controller
         $book->delete();
 
         return redirect(route('admin.books.index'));
-    }
-
-    private function resizeImage($path)
-    {
-        Image::make(storage_path('app/public/'.$path))->resize(256, 385)->save();
     }
 }

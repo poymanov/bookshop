@@ -11,6 +11,11 @@ class Book extends Model
 
     const DEFAULT_IMAGE_URL = '/images/no_image.jpg';
 
+    protected $casts = [
+        'pages_count' => 'integer',
+        'price' => 'float'
+    ];
+
     protected $fillable = [
         'title', 'description', 'author_id', 'isbn', 'year', 'pages_count', 'price', 'image'
     ];
