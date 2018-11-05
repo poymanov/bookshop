@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Book;
 use Image;
-use Illuminate\Http\Request;
+use App\Book;
 use Validator;
+use Illuminate\Http\Request;
 
 class BooksService
 {
@@ -62,6 +62,7 @@ class BooksService
         if ($validator->fails()) {
             $message = 'Validation failed';
             $errorData = $this->getFailedValidationData($message, $validator->errors());
+
             return [false, $errorData];
         }
 
