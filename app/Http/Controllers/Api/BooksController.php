@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Book;
-use App\Http\Resources\BookResource;
-use App\Services\BooksService;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Services\BooksService;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\BookResource;
 
 class BooksController extends Controller
 {
