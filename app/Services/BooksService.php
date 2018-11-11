@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Book;
 use Image;
 use Illuminate\Http\Request;
+use App\Book;
 
 class BooksService extends BaseService
 {
@@ -20,24 +20,6 @@ class BooksService extends BaseService
         'price' => 'required',
         'cover' => 'nullable|image'
     ];
-
-    /**
-     * @param Book $book
-     * @return array
-     */
-    public function createdResponseData(Book $book)
-    {
-        return $this->createdResponseDataBase($book, $this->showRouteName);
-    }
-
-    /**
-     * @param Book $book
-     * @return array
-     */
-    public function updatedResponseData(Book $book)
-    {
-        return $this->updatedResponseDataBase($book, $this->showRouteName);
-    }
 
     /**
      * @param Request $request
@@ -56,6 +38,24 @@ class BooksService extends BaseService
         }
 
         return $data;
+    }
+
+    /**
+     * @param Book $book
+     * @return array
+     */
+    public function createdResponseData(Book $book)
+    {
+        return $this->createdResponseDataBase($book, $this->showRouteName);
+    }
+
+    /**
+     * @param Book $book
+     * @return array
+     */
+    public function updatedResponseData(Book $book)
+    {
+        return $this->updatedResponseDataBase($book, $this->showRouteName);
     }
 
     /**
