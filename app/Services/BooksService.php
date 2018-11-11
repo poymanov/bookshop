@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Book;
 use Image;
 use Illuminate\Http\Request;
-use Validator;
 
-class BooksService
+class BooksService extends BaseService
 {
+    private $showRouteName = 'api.books.show';
+
     const VALIDATION_RULES = [
         'title' => 'required',
         'description' => 'required',
@@ -19,6 +20,24 @@ class BooksService
         'price' => 'required',
         'cover' => 'nullable|image'
     ];
+
+    /**
+     * @param Book $book
+     * @return array
+     */
+    public function createdResponseData(Book $book)
+    {
+        return $this->createdResponseDataBase($book, $this->showRouteName);
+    }
+
+    /**
+     * @param Book $book
+     * @return array
+     */
+    public function updatedResponseData(Book $book)
+    {
+        return $this->updatedResponseDataBase($book, $this->showRouteName);
+    }
 
     /**
      * @param Request $request
@@ -37,87 +56,6 @@ class BooksService
         }
 
         return $data;
-    }
-
-    /**
-     * @param $errors
-     * @return array
-     */
-    private function getFailedValidationData($message, $errors)
-    {
-        $data = $this->createJsonResponseData($message);
-        $data['data']['errors'] = $errors;
-
-        return $data;
-    }
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function validateJsonRequest(Request $request)
-    {
-        $validator = Validator::make($request->all(), self::VALIDATION_RULES);
-
-        if ($validator->fails()) {
-            $message = 'Validation failed';
-            $errorData = $this->getFailedValidationData($message, $validator->errors());
-            return [false, $errorData];
-        }
-
-        return [true, $validator->getData()];
-    }
-
-    /**
-     * @param Book $book
-     * @return array
-     */
-    public function createdResponseData(Book $book)
-    {
-        $message = 'Successfully created';
-
-        $data = $this->createJsonResponseData($message);
-        $data['data']['url'] = route('api.books.show', $book);
-
-        return $data;
-    }
-
-    /**
-     * @param Book $book
-     * @return array
-     */
-    public function updatedResponseData(Book $book)
-    {
-        $message = 'Successfully updated';
-
-        $data = $this->createJsonResponseData($message);
-        $data['data']['url'] = route('api.books.show', $book);
-
-        return $data;
-    }
-
-    /**
-     * @param Book $book
-     * @return array
-     */
-    public function deletedResponseData(Book $book)
-    {
-        $message = 'Successfully deleted';
-
-        return $this->createJsonResponseData($message);
-    }
-
-    /**
-     * @param $message
-     * @return array
-     */
-    private function createJsonResponseData($message)
-    {
-        return [
-            'data' => [
-                'message' => $message,
-            ]
-        ];
     }
 
     /**

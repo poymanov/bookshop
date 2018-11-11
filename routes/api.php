@@ -24,3 +24,11 @@ Route::group(['prefix' => 'books', 'as' => 'api.books.'], function () {
     Route::post('', 'Api\BooksController@store')->name('store');
     Route::delete('{book}', 'Api\BooksController@destroy')->name('destroy');
 });
+
+Route::group(['prefix' => 'authors', 'as' => 'api.authors.'], function () {
+    Route::get('', 'Api\AuthorsController@index')->name('index');
+    Route::get('{author}', 'Api\AuthorsController@show')->name('show');
+    Route::patch('{author}', 'Api\AuthorsController@update')->name('update');
+    Route::post('', 'Api\AuthorsController@store')->name('store');
+    Route::delete('{author}', 'Api\AuthorsController@destroy')->name('destroy');
+});
