@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Validator;
+use Illuminate\Http\Request;
 
 class BaseService
 {
@@ -20,6 +20,7 @@ class BaseService
         if ($validator->fails()) {
             $message = 'Validation failed';
             $errorData = $this->getFailedValidationData($message, $validator->errors());
+
             return [false, $errorData];
         }
 
