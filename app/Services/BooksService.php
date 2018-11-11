@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Image;
-use Illuminate\Http\Request;
 use App\Book;
+use Illuminate\Http\Request;
 
 class BooksService extends BaseService
 {

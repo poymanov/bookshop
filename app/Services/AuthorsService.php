@@ -29,6 +29,7 @@ class AuthorsService extends BaseService
     public function updatedResponseData(Author $author)
     {
         $routeName = 'api.authors.show';
+
         return $this->updatedResponseDataBase($author, $this->showRouteName);
     }
 }
