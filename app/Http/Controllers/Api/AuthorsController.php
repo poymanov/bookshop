@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Author;
 use App\Book;
-use App\Http\Resources\AuthorResource;
-use App\Http\Resources\BookResource;
-use App\Services\AuthorsService;
+use App\Author;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\AuthorsService;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BookResource;
+use App\Http\Resources\AuthorResource;
 
 class AuthorsController extends Controller
 {
