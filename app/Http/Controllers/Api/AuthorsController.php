@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Author;
-<<<<<<< HEAD
 use App\Book;
 use App\Http\Resources\AuthorResource;
 use App\Http\Resources\BookResource;
 use App\Services\AuthorsService;
-=======
->>>>>>> df678fc9789a523247e082322e08c26fb274fae7
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Services\AuthorsService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AuthorResource;
 
 class AuthorsController extends Controller
 {
