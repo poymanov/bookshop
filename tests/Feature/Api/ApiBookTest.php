@@ -5,15 +5,11 @@ namespace Tests\Feature\Api;
 use App\Book;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 
-class ApiBookTest extends TestCase
+class ApiBookTest extends ApiTestCase
 {
-    use RefreshDatabase;
-
     /**
      * @test
      */
@@ -264,28 +260,4 @@ class ApiBookTest extends TestCase
             ]
         ]);
     }
-
-    /**
-     * @param $books
-     * @return array|mixed
-     */
-    private function booksToArray($books)
-    {
-        $booksArray = [];
-
-        foreach ($books as $book) {
-            $booksArray[] = [
-                'title' => $book->title,
-                'description' => $book->description,
-                'isbn' => $book->isbn,
-                'year' => $book->year,
-                'pages_count' => $book->pages_count,
-                'price' => $book->price,
-                'image' => $book->image
-            ];
-        }
-
-        return count($booksArray) == 1 ? $booksArray[0] : $booksArray;
-    }
-
 }

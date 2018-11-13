@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Author;
+use App\Book;
 use App\Http\Resources\AuthorResource;
+use App\Http\Resources\BookResource;
 use App\Services\AuthorsService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -86,5 +88,10 @@ class AuthorsController extends Controller
         $data = $this->service->deletedResponseData();
 
         return response()->json($data)->setStatusCode(Response::HTTP_OK);
+    }
+
+    public function books(Author $author)
+    {
+        return BookResource::collection(Book::where(['author_id' => $author->id])->paginate(10));
     }
 }

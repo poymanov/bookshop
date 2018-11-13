@@ -3,15 +3,13 @@
 namespace Tests\Feature\Api;
 
 use App\Author;
-use Tests\TestCase;
+
+use App\Book;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Response;
 
-class ApiAuthorTest extends TestCase
+class ApiAuthorTest extends ApiTestCase
 {
-    use RefreshDatabase;
-
     /**
      * @test
      */
@@ -207,20 +205,36 @@ class ApiAuthorTest extends TestCase
     }
 
     /**
-     * @param $authors
-     * @return array|mixed
+     * @test
      */
-    private function authorsToArray($authors)
+    public function books_list_by_author()
     {
-        $authorsArray = [];
+        $author = create(Author::class);
+        $books = create(Book::class, ['author_id' => $author->id], 10);
 
-        foreach ($authors as $author) {
-            $authorsArray[] = [
-                'name' => $author->name,
-                'description' => $author->description,
-            ];
-        }
+        $booksArray = $this->booksToArray($books);
+        $response = $this->json('get', route('api.authors.books', $author));
 
-        return count($authorsArray) == 1 ? $authorsArray[0] : $authorsArray;
+        $response->assertStatus(Response::HTTP_OK);
+        $response->assertExactJson([
+            'data' => $booksArray,
+            'links' => [
+                'first' => route('api.authors.books', $author).'?page=1',
+                'last' => route('api.authors.books', $author).'?page=1',
+                'prev' => null,
+                'next' => null,
+            ],
+            'meta' => [
+                'current_page' => 1,
+                'from' => 1,
+                'last_page' => 1,
+                'path' => route('api.authors.books', $author),
+                'per_page' => 10,
+                'to' => 10,
+                'total' => 10,
+
+            ]
+        ]);
+
     }
 }

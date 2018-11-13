@@ -27,6 +27,7 @@ Route::group(['prefix' => 'books', 'as' => 'api.books.'], function () {
 
 Route::group(['prefix' => 'authors', 'as' => 'api.authors.'], function () {
     Route::get('', 'Api\AuthorsController@index')->name('index');
+    Route::get('{author}/books', 'Api\AuthorsController@books')->name('books');
     Route::get('{author}', 'Api\AuthorsController@show')->name('show');
     Route::patch('{author}', 'Api\AuthorsController@update')->name('update');
     Route::post('', 'Api\AuthorsController@store')->name('store');
