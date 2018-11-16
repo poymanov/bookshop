@@ -2,18 +2,18 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
 
 /**
- * Class User
+ * Class User.
  *
  * @property string $name
  * @property string $email
  * @property string $password
  * @property string $remember_token
- * @property boolean $admin
+ * @property bool $admin
  */
 class User extends Authenticatable
 {

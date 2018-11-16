@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\ApiAuthService;
-use App\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Auth;
+use App\User;
 use Validator;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\ApiAuthService;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -21,7 +21,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Авторизация пользователя для доступа к API
+     * Авторизация пользователя для доступа к API.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -43,7 +43,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         // Попытка авторизации с использованием данных из запроса
-        if(! Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             $responseData = $this->service->getUnauthorizedResponseData();
 
             return response()->json($responseData, Response::HTTP_UNAUTHORIZED);
@@ -69,7 +69,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Завершение сеанса авторизации пользователя
+     * Завершение сеанса авторизации пользователя.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use App\Services\ApiAuthService;
 use Exception;
 use Illuminate\Http\Response;
+use App\Services\ApiAuthService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -55,9 +55,10 @@ class Handler extends ExceptionHandler
                     'status_code' => Response::HTTP_NOT_FOUND
                 ]
             ], Response::HTTP_NOT_FOUND);
-        } else if ($request->url() == route('api.auth.logout') && $exception instanceof \Illuminate\Auth\AuthenticationException) {
+        } elseif ($request->url() == route('api.auth.logout') && $exception instanceof \Illuminate\Auth\AuthenticationException) {
             $apiAuthService = new ApiAuthService();
             $unauthorizedResponseData = $apiAuthService->getUnauthorizedLogoutReponseData();
+
             return response()->json($unauthorizedResponseData, Response::HTTP_UNAUTHORIZED);
         }
 
