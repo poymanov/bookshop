@@ -16,6 +16,7 @@ class BooksController extends Controller
     public function __construct()
     {
         $this->service = new BooksService();
+        $this->middleware('auth:api');
     }
 
     /**

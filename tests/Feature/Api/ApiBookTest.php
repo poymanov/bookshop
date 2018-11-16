@@ -11,13 +11,24 @@ use Illuminate\Http\Response;
 class ApiBookTest extends ApiTestCase
 {
     /**
+     * Получение данных конкретной книги
+     *
      * @test
      */
     public function get_book()
     {
         $book = create(Book::class);
 
-        $response = $this->json('get', route('api.books.show', $book));
+        $url = route('api.books.show', $book);
+
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+        $response = $this->json('get', $url);
         $response->assertStatus(Response::HTTP_OK);
 
         $bookArray = $this->booksToArray([$book]);
@@ -28,6 +39,8 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Попытка получения несуществующей в базе книги
+     *
      * @test
      */
     public function get_not_existed_book()
@@ -44,15 +57,26 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Получение списка книг
+     *
      * @test
      */
     public function get_books_list()
     {
+        $url = route('api.books.index');
+
         $books = create(Book::class, [],3);
 
         $booksArray = $this->booksToArray($books);
 
-        $response = $this->json('get', route('api.books.index'));
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+        $response = $this->json('get', $url);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson([
@@ -77,10 +101,15 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Получение списка книг, в котором более одной страницы
+     * (проверка мета-данных пагинации)
+     *
      * @test
      */
     public function get_books_list_with_more_one_page()
     {
+        $this->authApi();
+
         create(Book::class, [],20);
 
         $response = $this->json('get', route('api.books.index'));
@@ -95,11 +124,23 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Ошибки валидации при создании новой книги
+     *
      * @test
      */
     public function create_book_validation_failed()
     {
-        $response = $this->json('post', route('api.books.store'), []);
+        $url = route('api.books.store');
+
+        // Неавторизованный пользователь
+        $response = $this->json('post', $url, []);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('post', $url, []);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $response->assertExactJson([
@@ -119,10 +160,14 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Успешное создание новой книги
+     *
      * @test
      */
     public function create_book_success()
     {
+        $this->authApi();
+
         $book = make(Book::class);
 
         $response = $this->json('post', route('api.books.store'), $book->toArray());
@@ -149,10 +194,14 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Успешное создание новой книги с загрузкой изображения
+     *
      * @test
      */
     public function create_book_success_with_image()
     {
+        $this->authApi();
+
         Storage::fake('public');
 
         $book = make(Book::class);
@@ -170,13 +219,25 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Ошибки валидации при попытке изменения книги
+     *
      * @test
      */
     public function update_book_validation_failed()
     {
         $book = create(Book::class);
 
-        $response = $this->json('patch', route('api.books.update', $book), []);
+        $url = route('api.books.update', $book);
+
+        // Неавторизованный пользователь
+        $response = $this->json('patch', $url, []);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('patch', $url, []);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -197,10 +258,14 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Успешное изменение книги
+     *
      * @test
      */
     public function update_book_success()
     {
+        $this->authApi();
+
         $book = create(Book::class);
         $newPrice = 999;
 
@@ -221,10 +286,14 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Успешное измение книги с загрузкой изображения
+     *
      * @test
      */
     public function update_book_success_with_image()
     {
+        $this->authApi();
+
         Storage::fake('public');
 
         $book = create(Book::class);
@@ -242,13 +311,25 @@ class ApiBookTest extends ApiTestCase
     }
 
     /**
+     * Удаление книги
+     *
      * @test
      */
     public function delete_book()
     {
         $book = create(Book::class);
 
-        $response = $this->json('delete', route('api.books.destroy', $book));
+        $url = route('api.books.destroy', $book);
+
+        // Неавторизованный пользователь
+        $response = $this->json('delete', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('delete', $url);
 
         $this->assertDatabaseMissing('books', [
             'id' => $book->id,
