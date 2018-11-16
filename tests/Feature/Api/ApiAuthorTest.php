@@ -11,13 +11,24 @@ use Illuminate\Http\Response;
 class ApiAuthorTest extends ApiTestCase
 {
     /**
+     * Полученние данных по конкретному автору
+     *
      * @test
      */
     public function get_author()
     {
         $book = create(Author::class);
 
-        $response = $this->json('get', route('api.authors.show', $book));
+        $url = route('api.authors.show', $book);
+
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+        $response = $this->json('get', $url);
         $response->assertStatus(Response::HTTP_OK);
 
         $authorArray = $this->authorsToArray([$book]);
@@ -28,10 +39,14 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Получение автора, которого нет в базе
+     *
      * @test
      */
     public function get_not_existed_author()
     {
+        $this->authApi();
+
         $response = $this->json('get', route('api.authors.show', 999));
         $response->assertStatus(Response::HTTP_NOT_FOUND);
 
@@ -44,15 +59,25 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Получение списка авторов
+     *
      * @test
      */
     public function get_authors_list()
     {
+        $url = route('api.authors.index');
+
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
         $authors = create(Author::class, [],3);
-
         $authorsArray = $this->authorsToArray($authors);
-
-        $response = $this->json('get', route('api.authors.index'));
+        $response = $this->json('get', $url);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson([
@@ -77,11 +102,16 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Получение списка авторов, который состоит более чем из одной страницы
+     * (проверка мета-данных пагинации)
+     *
      * @test
      */
     public function get_authors_list_with_more_one_page()
     {
         create(Author::class, [],20);
+
+        $this->authApi();
 
         $response = $this->json('get', route('api.authors.index'));
 
@@ -95,11 +125,23 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Ошибки валидации при создании нового автора
+     *
      * @test
      */
     public function create_author_validation_failed()
     {
-        $response = $this->json('post', route('api.authors.store'), []);
+        $url = route('api.authors.store');
+
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url, []);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('post', $url, []);
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
         $response->assertExactJson([
@@ -114,11 +156,16 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Успешное создание нового автора
+     *
      * @test
      */
     public function create_author_success()
     {
         $author = make(Author::class);
+
+        // Администратор
+        $this->authApi();
 
         $response = $this->json('post', route('api.authors.store'), $author->toArray());
         $response->assertStatus(Response::HTTP_CREATED);
@@ -139,13 +186,25 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Ошибки валидации при попытке изменения автора
+     *
      * @test
      */
     public function update_author_validation_failed()
     {
         $author = create(Author::class);
 
-        $response = $this->json('patch', route('api.authors.update', $author), []);
+        $url = route('api.authors.update', $author);
+
+        // Неавторизованный пользователь
+        $response = $this->json('patch', $url, []);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('patch', $url, []);
 
         $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 
@@ -161,10 +220,14 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Успешное изменение автора
+     *
      * @test
      */
     public function update_author_success()
     {
+        $this->authApi();
+
         $author = create(Author::class);
         $newName = 'test';
 
@@ -185,13 +248,25 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Удаление автора
+     *
      * @test
      */
-    public function delete_book()
+    public function delete_author()
     {
         $author = create(Author::class);
 
-        $response = $this->json('delete', route('api.authors.destroy', $author));
+        $url = route('api.authors.destroy', $author);
+
+        // Неавторизованный пользователь
+        $response = $this->json('delete', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
+        $response = $this->json('delete', $url);
 
         $this->assertDatabaseMissing('authors', [
             'id' => $author->id,
@@ -205,6 +280,8 @@ class ApiAuthorTest extends ApiTestCase
     }
 
     /**
+     * Получение списка книг автора
+     *
      * @test
      */
     public function books_list_by_author()
@@ -212,8 +289,18 @@ class ApiAuthorTest extends ApiTestCase
         $author = create(Author::class);
         $books = create(Book::class, ['author_id' => $author->id], 10);
 
+        $url = route('api.authors.books', $author);
+
+        // Неавторизованный пользователь
+        $response = $this->json('get', $url);
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $response->assertExactJson($this->getAccessDeniedResponseData());
+
+        // Администратор
+        $this->authApi();
+
         $booksArray = $this->booksToArray($books);
-        $response = $this->json('get', route('api.authors.books', $author));
+        $response = $this->json('get', $url);
 
         $response->assertStatus(Response::HTTP_OK);
         $response->assertExactJson([

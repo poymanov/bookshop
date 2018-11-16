@@ -20,7 +20,7 @@ class ApiAuthService
         ],
         'ACCESS_DENIED' => [
             'MESSAGE' => 'Access denied',
-            'ERRORS' => 'You have not permission to login to API',
+            'ERRORS' => 'You have not access permission to API',
         ],
         'UNAUTHORIZED_LOGOUT' => [
             'MESSAGE' => 'Unauthorized',

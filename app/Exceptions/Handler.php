@@ -59,6 +59,10 @@ class Handler extends ExceptionHandler
             $apiAuthService = new ApiAuthService();
             $unauthorizedResponseData = $apiAuthService->getUnauthorizedLogoutReponseData();
             return response()->json($unauthorizedResponseData, Response::HTTP_UNAUTHORIZED);
+        } else if ($request->expectsJson() && $exception instanceof \Illuminate\Auth\AuthenticationException) {
+            $apiAuthService = new ApiAuthService();
+            $accessDeniedResponseData = $apiAuthService->getAccessDeniedResponseData();
+            return response()->json($accessDeniedResponseData, Response::HTTP_FORBIDDEN);
         }
 
         return parent::render($request, $exception);

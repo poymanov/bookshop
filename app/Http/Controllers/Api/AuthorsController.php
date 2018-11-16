@@ -18,6 +18,7 @@ class AuthorsController extends Controller
     public function __construct()
     {
         $this->service = new AuthorsService();
+        $this->middleware('auth:api');
     }
 
     /**

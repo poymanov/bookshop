@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Services\ApiAuthService;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,5 +63,11 @@ class ApiTestCase extends TestCase
     protected function authApi()
     {
         Passport::actingAs($this->createAdmin());
+    }
+
+    protected function getAccessDeniedResponseData()
+    {
+        $apiAuthService = new ApiAuthService();
+        return $apiAuthService->getAccessDeniedResponseData();
     }
 }
