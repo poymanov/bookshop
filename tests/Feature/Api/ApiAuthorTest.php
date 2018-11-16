@@ -17,9 +17,9 @@ class ApiAuthorTest extends ApiTestCase
      */
     public function get_author()
     {
-        $book = create(Author::class);
+        $author = create(Author::class);
 
-        $url = route('api.authors.show', $book);
+        $url = route('api.authors.show', $author);
 
         // Неавторизованный пользователь
         $response = $this->json('get', $url);
@@ -31,7 +31,7 @@ class ApiAuthorTest extends ApiTestCase
         $response = $this->json('get', $url);
         $response->assertStatus(Response::HTTP_OK);
 
-        $authorArray = $this->authorsToArray([$book]);
+        $authorArray = $this->authorsToArray([$author]);
 
         $response->assertExactJson([
             'data' => $authorArray,
@@ -175,12 +175,12 @@ class ApiAuthorTest extends ApiTestCase
             'description' => $author->description,
         ]);
 
-        $book = Author::first();
+        $author = Author::first();
 
         $response->assertExactJson([
             'data' => [
                 'message' => 'Successfully created',
-                'url' => route('api.authors.show', $book)
+                'url' => route('api.authors.show', $author)
             ]
         ]);
     }
