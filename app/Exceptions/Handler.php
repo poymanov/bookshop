@@ -48,23 +48,29 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->expectsJson() && $exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+        if (! $request->expectsJson()) {
+            return parent::render($request, $exception);
+        }
+
+        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->json([
                 'data' => [
                     'message' => 'Resource not found',
                     'status_code' => Response::HTTP_NOT_FOUND
                 ]
             ], Response::HTTP_NOT_FOUND);
-        } else if ($request->url() == route('api.auth.logout') && $exception instanceof \Illuminate\Auth\AuthenticationException) {
-            $apiAuthService = new ApiAuthService();
-            $unauthorizedResponseData = $apiAuthService->getUnauthorizedLogoutReponseData();
-            return response()->json($unauthorizedResponseData, Response::HTTP_UNAUTHORIZED);
-        } else if ($request->expectsJson() && $exception instanceof \Illuminate\Auth\AuthenticationException) {
-            $apiAuthService = new ApiAuthService();
-            $accessDeniedResponseData = $apiAuthService->getAccessDeniedResponseData();
-            return response()->json($accessDeniedResponseData, Response::HTTP_FORBIDDEN);
-        }
+        } else if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            if ($request->url() == route('api.auth.logout')) {
+                $apiAuthService = new ApiAuthService();
+                $unauthorizedResponseData = $apiAuthService->getUnauthorizedLogoutReponseData();
+                return response()->json($unauthorizedResponseData, Response::HTTP_UNAUTHORIZED);
+            } else {
+                $apiAuthService = new ApiAuthService();
+                $accessDeniedResponseData = $apiAuthService->getAccessDeniedResponseData();
+                return response()->json($accessDeniedResponseData, Response::HTTP_FORBIDDEN);
+            }
 
-        return parent::render($request, $exception);
+
+        }
     }
 }
