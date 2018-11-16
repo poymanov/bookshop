@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -53,5 +54,13 @@ class ApiTestCase extends TestCase
         }
 
         return count($booksArray) == 1 ? $booksArray[0] : $booksArray;
+    }
+
+    /**
+     * Авторизация пользователя для API
+     */
+    protected function authApi()
+    {
+        Passport::actingAs($this->createAdmin());
     }
 }

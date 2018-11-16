@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Services\ApiAuthService;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -47,13 +48,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+        if ($request->expectsJson() && $exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
             return response()->json([
                 'data' => [
                     'message' => 'Resource not found',
                     'status_code' => Response::HTTP_NOT_FOUND
                 ]
             ], Response::HTTP_NOT_FOUND);
+        } else if ($request->url() == route('api.auth.logout') && $exception instanceof \Illuminate\Auth\AuthenticationException) {
+            $apiAuthService = new ApiAuthService();
+            $unauthorizedResponseData = $apiAuthService->getUnauthorizedLogoutReponseData();
+            return response()->json($unauthorizedResponseData, Response::HTTP_UNAUTHORIZED);
         }
 
         return parent::render($request, $exception);
